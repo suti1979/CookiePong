@@ -1,77 +1,84 @@
-//
-//
-//import Foundation
-//
-//func startAnimatingBall(
-//    screenWidth: CGFloat, screenHeight: CGFloat,
-//    racketPosition: inout CGPoint,
-//                        ballPosition: inout CGPoint,
-//                        ballVelocity: inout CGVector,
-//                        isGamePaused: inout Bool,
-//                        currentFruit: inout String,
-//                        fruitPosition: inout CGPoint,
-//                        deathCount: inout Int,
-//                        hitCount: inout Int,
-//                        ballRadius: inout CGFloat,
-//                        racketWidth : inout CGFloat,
-//                        racketHeight: inout CGFloat
-//    
-//) {
-//    // Reset ball position and velocity
-//    ballPosition = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-//    ballVelocity = CGVector(dx: 3.0, dy: -3.0)
-//
-//    var timer: Timer?
-//    timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
-//        if isGamePaused {
-//            timer?.invalidate()
-//            timer = nil
-//            return
-//        }
-//
-//        ballPosition.x += ballVelocity.dx
-//        ballPosition.y += ballVelocity.dy
-//
-//        // Check ball collision with walls
-//        if ballPosition.x <= ballRadius || ballPosition.x >= screenWidth - ballRadius {
-//            ballVelocity.dx *= -1
-//        }
-//        if ballPosition.y <= ballRadius {
-//            ballVelocity.dy *= -1
-//        }
-//
-//        // Check ball collision with the racket
-//        if ballPosition.y + ballRadius >= racketPosition.y - racketHeight / 2 && ballPosition.y - ballRadius <= racketPosition.y + racketHeight / 2 && ballPosition.x >= racketPosition.x - racketWidth / 2 && ballPosition.x <= racketPosition.x + racketWidth / 2 {
-//            ballVelocity.dy *= -1
-//        }
-//
-//        // Check if ball goes below the screen
-//        if ballPosition.y > screenHeight {
-//            isGamePaused = true
-//            deathCount += 1
-//        }
-//
-//        if fruitHit(ballPosition: ballPosition, fruitPosition: fruitPosition) {
-//            hitCount += 1
-//            fruitPosition = randomFruitPosition()
-//            currentFruit = randomFruit()
-//        }
-//
-//    }
-//    timer?.fire()
-//}
-//
-////private func fruitHit(ballPosition: CGPoint, fruitPosition: CGPoint) -> Bool {
-////    let distance = sqrt(pow(ballPosition.x - fruitPosition.x, 2) + pow(ballPosition.y - fruitPosition.y, 2))
-////    return distance <= ballRadius
-////}
-////
-////private func randomFruit() -> String {
-////    return fruits.randomElement() ?? ""
-////}
-////
-////private func randomFruitPosition() -> CGPoint {
-////    let x = CGFloat.random(in: 0...UIScreen.main.bounds.width)
-////    let y = CGFloat.random(in: 0...UIScreen.main.bounds.height / 2)
-////    return CGPoint(x: x, y: y)
-////}
+import Foundation
+import UIKit
+
+class GameLogic: ObservableObject {
+    @Published var racketPosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height - 50)
+    @Published var cookiePosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
+    @Published var cookieVelocity = CGVector(dx: 3.0, dy: -3.0)
+    @Published var isGamePaused = false
+    @Published var currentFood = ""
+    @Published var foodPosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
+    
+    @Published var lostCount = 0
+    @Published var hitCount = -1
+    
+    let racketWidth: CGFloat = 100
+    let racketHeight: CGFloat = 20
+    let cookieRadius: CGFloat = 18
+    let foodSize: CGFloat = 50
+    
+    private let food: [String] = ["🍔","🍕","🍗","🥩","🌮","🌭"]
+    
+    private var timer: Timer?
+    
+    func startAnimatingBall() {
+        self.cookiePosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
+        self.cookieVelocity = CGVector(dx: 3.0, dy: -3.0)
+        
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            
+            if self.isGamePaused {
+                self.timer?.invalidate()
+                self.timer = nil
+                return
+            }
+            
+            self.cookiePosition.x += self.cookieVelocity.dx
+            self.cookiePosition.y += self.cookieVelocity.dy
+            
+            // Check cookie collision with walls
+            if self.cookiePosition.x <= self.cookieRadius || self.cookiePosition.x >= UIScreen.main.bounds.width - self.cookieRadius {
+                self.cookieVelocity.dx *= -1
+            }
+            if self.cookiePosition.y <= self.cookieRadius {
+                self.cookieVelocity.dy *= -1
+            }
+            
+            // Check cookie collision with the racket
+            if self.cookiePosition.y + self.cookieRadius >= self.racketPosition.y - self.racketHeight / 2 && self.cookiePosition.y - self.cookieRadius <= self.racketPosition.y + self.racketHeight / 2 && self.cookiePosition.x >= self.racketPosition.x - self.racketWidth / 2 && self.cookiePosition.x <= self.racketPosition.x + self.racketWidth / 2 {
+                self.cookieVelocity.dy *= -1
+            }
+            
+            // Check if cookie goes below the screen
+            if self.cookiePosition.y > UIScreen.main.bounds.height {
+                self.isGamePaused = true
+                self.lostCount += 1
+            }
+            
+            if self.foodHit(cookiePosition: self.cookiePosition, fruitPosition: self.foodPosition) {
+                self.hitCount += 1
+                self.foodPosition = self.randomFruitPosition()
+                self.currentFood = self.randomFruit()
+            }
+        }
+        
+        timer?.fire()
+    }
+    
+    private func foodHit(cookiePosition: CGPoint, fruitPosition: CGPoint) -> Bool {
+        let distance = sqrt(pow(cookiePosition.x - fruitPosition.x, 2) + pow(cookiePosition.y - fruitPosition.y, 2))
+        return distance <= cookieRadius * 2
+    }
+    
+    func randomFruit() -> String {
+        return food.randomElement() ?? ""
+    }
+    
+    func randomFruitPosition() -> CGPoint {
+        let x = CGFloat.random(in: foodSize...UIScreen.main.bounds.width - foodSize)
+        let y = CGFloat.random(in: foodSize * 2...UIScreen.main.bounds.height / 2)
+        return CGPoint(x: x, y: y)
+    }
+}

@@ -11,7 +11,7 @@
 		A24F4F092A20931B000B37E9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24F4F082A20931B000B37E9 /* ContentView.swift */; };
 		A24F4F0B2A20931C000B37E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A24F4F0A2A20931C000B37E9 /* Assets.xcassets */; };
 		A24F4F0E2A20931C000B37E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A24F4F0D2A20931C000B37E9 /* Preview Assets.xcassets */; };
-		A24F4F152A20B73A000B37E9 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24F4F142A20B73A000B37E9 /* GameLogic.swift */; };
+		A2700D312A20DD99000FD76F /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2700D302A20DD99000FD76F /* GameLogic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,7 +20,7 @@
 		A24F4F082A20931B000B37E9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A24F4F0A2A20931C000B37E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A24F4F0D2A20931C000B37E9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A24F4F142A20B73A000B37E9 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
+		A2700D302A20DD99000FD76F /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 			children = (
 				A24F4F062A20931B000B37E9 /* CookiePongApp.swift */,
 				A24F4F082A20931B000B37E9 /* ContentView.swift */,
-				A24F4F142A20B73A000B37E9 /* GameLogic.swift */,
+				A2700D302A20DD99000FD76F /* GameLogic.swift */,
 				A24F4F0A2A20931C000B37E9 /* Assets.xcassets */,
 				A24F4F0C2A20931C000B37E9 /* Preview Content */,
 			);
@@ -140,7 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A24F4F152A20B73A000B37E9 /* GameLogic.swift in Sources */,
+				A2700D312A20DD99000FD76F /* GameLogic.swift in Sources */,
 				A24F4F092A20931B000B37E9 /* ContentView.swift in Sources */,
 				A24F4F072A20931B000B37E9 /* CookiePongApp.swift in Sources */,
 			);
