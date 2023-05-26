@@ -22,8 +22,8 @@ struct ContentView: View {
             ZStack {
                 Color.green
                 
-                Text("Hit: \(hitCount)").position(x:40, y:40)
-                Text("Death: \(deathCount)").position(x:40, y:80)
+                Text("Hit: \(hitCount)").position(x:40, y:40).bold()
+                Text("Lost: \(deathCount)").position(x: UIScreen.main.bounds.width - 42, y:40).bold()
                 
                 Capsule()
                     .fill(LinearGradient(
@@ -62,7 +62,7 @@ struct ContentView: View {
             .edgesIgnoringSafeArea(.all)
             .alert(isPresented: $isGamePaused) {
                 Alert(
-                    title: Text("Don't Panic"),
+                    title: Text("Don't Panic!"),
                     message: Text("Press cookie continue"),
                     dismissButton: .default(Text("🍪")) {
                         startAnimatingBall()
@@ -119,7 +119,7 @@ struct ContentView: View {
     
     private func fruitHit(ballPosition: CGPoint, fruitPosition: CGPoint) -> Bool {
         let distance = sqrt(pow(ballPosition.x - fruitPosition.x, 2) + pow(ballPosition.y - fruitPosition.y, 2))
-        return distance <= ballRadius
+        return distance <= ballRadius * 2
     }
     
     private func randomFruit() -> String {
