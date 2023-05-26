@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var racketPosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height - 50)
     @State private var ballPosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
     @State private var ballVelocity = CGVector(dx: 3.0, dy: -3.0)
+    @State private var isGamePaused = false
     private let racketWidth: CGFloat = 100
     private let racketHeight: CGFloat = 20
     private let ballRadius: CGFloat = 10
@@ -36,6 +37,20 @@ struct ContentView: View {
                     }
             }
             .edgesIgnoringSafeArea(.all)
+            .alert(isPresented: $isGamePaused) {
+                Alert(
+                    title: Text("Game Over"),
+                    message: Text("Tap the screen to continue"),
+                    dismissButton: .default(Text("Play")) {
+                        startAnimatingBall()
+                    }
+                )
+            }
+//            .onTapGesture {
+//                if isGamePaused {
+//                    startAnimatingBall()
+//                }
+//            }
         }
     }
     
@@ -55,6 +70,12 @@ struct ContentView: View {
             // Check ball collision with the racket
             if ballPosition.y + ballRadius >= racketPosition.y - racketHeight / 2 && ballPosition.y - ballRadius <= racketPosition.y + racketHeight / 2 && ballPosition.x >= racketPosition.x - racketWidth / 2 && ballPosition.x <= racketPosition.x + racketWidth / 2 {
                 ballVelocity.dy *= -1
+            }
+            
+            // Check if ball goes below the screen
+            if ballPosition.y > UIScreen.main.bounds.height {
+                isGamePaused = true
+                
             }
         }
         timer.fire()
